@@ -59,14 +59,14 @@ async def admin(update, context):
         return False
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await say(update, "╭━━━「 GROUP TOOLKIT 」━━━╮\\n"
-        "Start the bot and add it to your group.\\n\\n"
-        "/target — reply to a user; auto-delete their new messages\\n"
-        "/release — stop targeting a user\\n/targets — list targets\\n"
-        "/ban — reply to a user to ban (admins only)\\n/banall — API limitation info\\n"
-        "/search [3-7] — solve a WordSeek letter grid\\n/g [3-7] — solver helper\\n"
-        "/s — stop helper\\n/raw — inspect replied message data\\n/help — guide\\n\\n"
-        f"Made by: {CREATOR}\\n╰━━━━━━━━━━━━━━━━━━━━━━╯")
+    await say(update, "╭━━━「 GROUP TOOLKIT 」━━━╮\n"
+        "Start the bot and add it to your group.\n\n"
+        "/target — reply to a user; auto-delete their new messages\n"
+        "/release — stop targeting a user\n/targets — list targets\n"
+        "/ban — reply to a user to ban (admins only)\n/banall — API limitation info\n"
+        "/search [3-7] — solve a WordSeek letter grid\n/g [3-7] — solver helper\n"
+        "/s — stop helper\n/raw — inspect replied message data\n/help — guide\n\n"
+        f"Made by: {CREATOR}\n╰━━━━━━━━━━━━━━━━━━━━━━╯")
 
 async def help_cmd(update, context):
     await say(update, "Use /target and /release by replying to a member. /ban is reply-based and admin-only. "
@@ -105,7 +105,7 @@ async def release_cmd(update, context):
 async def targets_cmd(update, context):
     if not group(update): return await say(update, "Use in a group.")
     ids = sorted(targets.get(str(update.effective_chat.id), set()))
-    await say(update, "No active targets." if not ids else "Target user IDs:\\n" + "\\n".join(map(str, ids)))
+    await say(update, "No active targets." if not ids else "Target user IDs:\n" + "\n".join(map(str, ids)))
 
 async def delete_targets(update, context):
     m, c, u = update.effective_message, update.effective_chat, update.effective_user
@@ -167,10 +167,10 @@ async def search_cmd(update, context):
     minimum = int(context.args[0]) if context.args and context.args[0].isdigit() else 3
     minimum = max(3, min(7, minimum))
     board = parse_board(source)
-    if not board: return await say(update, "Reply to a letter grid or send /search followed by rows, e.g. ABCD\\nEFGH\\nIJKL.")
+    if not board: return await say(update, "Reply to a letter grid or send /search followed by rows, e.g. ABCD\nEFGH\nIJKL.")
     found = solve(board, minimum)
     if not found: return await say(update, "No matching words found. Check the grid and dictionary.")
-    await say(update, f"Found {len(found)} words (up to 60):\\n" + ", ".join(found[:60]))
+    await say(update, f"Found {len(found)} words (up to 60):\n" + ", ".join(found[:60]))
 
 async def game_cmd(update, context):
     if not group(update): return await say(update, "Use /g in a group.")
@@ -187,10 +187,10 @@ async def raw_cmd(update, context):
     if not m or not m.reply_to_message: return await say(update, "Reply to a message with /raw.")
     x = m.reply_to_message
     text = x.text or x.caption or "[no text]"
-    info = (f"Message ID: {x.message_id}\\nChat ID: {x.chat_id}\\n"
-        f"Sender ID: {x.from_user.id if x.from_user else 'unknown'}\\n"
-        f"Date: {x.date.isoformat() if x.date else 'unknown'}\\n"
-        f"Text: {text[:2500]}\\nEntities: {len(x.entities or x.caption_entities or [])}\\n"
+    info = (f"Message ID: {x.message_id}\nChat ID: {x.chat_id}\n"
+        f"Sender ID: {x.from_user.id if x.from_user else 'unknown'}\n"
+        f"Date: {x.date.isoformat() if x.date else 'unknown'}\n"
+        f"Text: {text[:2500]}\nEntities: {len(x.entities or x.caption_entities or [])}\n"
         f"Media: {'yes' if x.effective_attachment else 'no'}")
     await say(update, info)
 
